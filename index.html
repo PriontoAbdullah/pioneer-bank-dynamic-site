@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pioneer Bank</title>
+    <!------------ CSS Files ------------>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/mdb.min.css">
+    <!------------ Google Fonts ------------>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Baloo+2:400,600,700&display=swap">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
+</head>
+
+<body class="container">
+    <!------------ Login Form ------------>
+    <div id="login-area">
+        <h1 class="text-center text-primary m-5">Welcome To Pioneer Bank</h1>
+
+        <div class="d-flex justify-content-center">
+            <div class="login col-md-6">
+                <!-- Default form login -->
+                <form class="text-center border border-primary z-depth-1 p-5 mb-2">
+
+                    <p class="h4 mb-4">Login</p>
+
+                    <!-- Email -->
+                    <input type="email" id="defaultLoginFormEmail" class="form-control mb-4" placeholder="E-mail">
+
+                    <!-- Password -->
+                    <input type="password" id="defaultLoginFormPassword" class="form-control mb-4" placeholder="Password">
+
+                    <div class="d-flex justify-content-around">
+                        <div>
+                            <!-- Remember me -->
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="defaultLoginFormRemember">
+                                <label class="custom-control-label" for="defaultLoginFormRemember">Remember me</label>
+                            </div>
+                        </div>
+                        <div>
+                            <!-- Forgot password -->
+                            <a href="">Forgot password?</a>
+                        </div>
+                    </div>
+
+                    <!-- Sign in button -->
+                    <a href="#" class="btn blue-gradient btn-block my-4" id="login" type="submit">Login</a>
+
+                    <!-- Register -->
+                    <p>Not a member?
+                        <a href=""> Register</a>
+                    </p>
+
+                    <!-- Social login -->
+                    <p>or sign in with:</p>
+
+                    <a href="#" class="mx-2" role="button"><i class="fab fa-facebook-f light-blue-text"></i></a>
+                    <a href="#" class="mx-2" role="button"><i class="fab fa-twitter light-blue-text"></i></a>
+                    <a href="#" class="mx-2" role="button"><i class="fab fa-linkedin-in light-blue-text"></i></a>
+                    <a href="#" class="mx-2" role="button"><i class="fab fa-github light-blue-text"></i></a>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-------- Transaction Area -------->
+
+    <div id="transaction-area">
+        <div class="row my-5 justify-content-around">
+            <!-- Deposit -->
+            <div class="col-md-4 .offset-md-1 ">
+                <div class="cat px-5 my-2 peach-gradient z-depth-1">
+                    <h4>Deposit</h4>
+                    <h2>$ <span id="currentDeposit">00</span></h2>
+                </div>
+            </div>
+            <!-- Withdraw -->
+            <div class="col-md-4 .offset-md-1 ">
+                <div class="cat px-5 my-2 aqua-gradient z-depth-1 ">
+                    <h4>Withdraw</h4>
+                    <h2>$ <span id="currentWithdraw">00</span></h2>
+                </div>
+            </div>
+            <!-- Balance -->
+            <div class="col-md-4 .offset-md-1 ">
+                <div class="cat px-5 my-2 purple-gradient z-depth-1">
+                    <h4>Balance</h4>
+                    <h2>$ <span id="currentBalance">1240</span></h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="row justify-content-around">
+            <div class="col-md-5">
+                <form class="border border-primary z-depth-1-half p-4 px-5 mr-3 my-4">
+                    <h4 class="ml-2">Deposit</h4>
+                    <div class="md-form ml-2">
+                        <input id="depositAmount" type="text" class="from-control" placeholder="$ amount">
+                    </div>
+                    <button id="addDeposit" class="btn blue-gradient"> Deposit</button>
+                </form>
+            </div>
+            <div class="col-md-5">
+                <form class="border border-primary z-depth-1-half p-4 px-5 mr-3 my-4">
+                    <h4 class="ml-2">Withdraw</h4>
+                    <div class="md-form ml-2">
+                        <input id="withdrawAmount" type="text" class="from-control" placeholder="$ amount">
+                    </div>
+                    <button id="addWithdraw" class="btn blue-gradient">Withdraw</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <!-------- Javascript hare -------->
+    <script type="text/javascript">
+        // login button event handler
+        const loginBtn = document.getElementById("login");
+        loginBtn.addEventListener("click", function() {
+            const loginArea = document.getElementById("login-area");
+            loginArea.style.display = "none";
+
+            const transactionArea = document.getElementById("transaction-area");
+            transactionArea.style.display = "block";
+        });
+
+        //deposit button handler
+        const depositBtn = document.getElementById("addDeposit");
+        depositBtn.addEventListener("click", function() {
+            const depositNumber = getInputNumber("depositAmount");
+
+            updateSpanText("currentDeposit", depositNumber);
+            updateSpanText("currentBalance", depositNumber);
+
+            document.getElementById("depositAmount").value = "";
+        });
+
+        //withdraw button handler
+        const withdrawBtn = document.getElementById("addWithdraw");
+        withdrawBtn.addEventListener("click", function() {
+            const withdrawNumber = getInputNumber("withdrawAmount");
+
+            updateSpanText("currentWithdraw", withdrawNumber);
+            updateSpanText("currentBalance", -1 * withdrawNumber);
+
+            document.getElementById("withdrawAmount").value = "";
+        });
+
+        function getInputNumber(id) {
+            const Amount = document.getElementById(id).value;
+            const amountNumber = parseFloat(Amount);
+            return amountNumber;
+        };
+
+        function updateSpanText(id, amountNumber) {
+            const current = document.getElementById(id).innerText;
+            const currentNumber = parseFloat(current);
+            const totalAmount = currentNumber + amountNumber;
+
+            document.getElementById(id).innerText = totalAmount;
+        };
+    </script>
+
+</body>
+
+</html>
